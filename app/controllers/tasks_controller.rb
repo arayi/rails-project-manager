@@ -20,6 +20,10 @@ class TasksController < ApplicationController
 
   # GET /tasks/1/edit
   def edit
+    @project = Project.find(params[@task.project_id])
+    if current_user.admin == false && current_user.id != @project.user_id
+      redirect_to @project
+    end
   end
 
   # POST /tasks
@@ -41,13 +45,18 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1
   # PATCH/PUT /tasks/1.json
   def update
-    respond_to do |format|
-      if @task.update(task_params)
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
+    @project = Project.find(params[@task.project_id])
+    if current_user.admin == false && current_user.id != @project.user_id
+      redirect_to @project
+    else
+      respond_to do |format|
+        if @task.update(task_params)
+          format.html { redirect_to @task, notice: 'Task was successfully updated.' }
+          format.json { head :no_content }
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: @task.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -55,10 +64,15 @@ class TasksController < ApplicationController
   # DELETE /tasks/1
   # DELETE /tasks/1.json
   def destroy
-    @task.destroy
-    respond_to do |format|
-      format.html { redirect_to project_url(@task.project_id) }
-      format.json { head :no_content }
+    @project = Project.find(params[@task.project_id])
+    if current_user.admin == false && current_user.id != @project.user_id
+      redirect_to @project
+    else
+      @task.destroy
+      respond_to do |format|
+        format.html { redirect_to project_url(@task.project_id) }
+        format.json { head :no_content }
+      end
     end
   end
 
