@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -7,6 +7,7 @@
     <title><%= content_for?(:title) ? yield(:title) : "ProjectManager" %></title>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag "application", :media => "all" %>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   </head>
   <body>
 
@@ -26,10 +27,23 @@
               </li>
             </ul>
 
+
             <ul class="nav user-nav">
               <% if user_signed_in? %>
-                <li><%= link_to "My Account", edit_user_registration_path %></li>
-                <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
+                <li>
+                  <div class="dropdown">
+                    <button data-toggle="dropdown" type="button" class="btn btn-default btn-lg">
+                      <i class="fa fa-gear"></i> <span class="caret"></span>
+                    </button>
+
+                    <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Logged in as <%= current_user.email %></a></li>
+                      <li class="divider"></li>
+                      <li><%= link_to "My Account", edit_user_registration_path %></li>
+                      <li><%= link_to "Sign out", destroy_user_session_path, method: :delete %></li>
+                    </ul>
+                  </div>
+                </li>
               <% else %>
                 <li><%= link_to "Sign in", user_session_path %></li>
                 <li><%= link_to "Sign up", new_user_registration_path %></li>

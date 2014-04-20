@@ -1,6 +1,13 @@
 ProjectManager::Application.routes.draw do
+  resources :tasks # only: [:create, :destroy]
+
   devise_for :users
-  resources :projects
+  resources :projects do
+    member do
+      get 'new_task'
+      post 'create_task'
+    end
+  end
   root to: 'pages#home'
 
 

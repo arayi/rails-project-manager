@@ -1,9 +1,42 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
-  <%= @project.name %>
+  <h4>Project: <%= @project.name.titleize %></h4>
+  <% if @project.user_id == current_user.id || current_user.admin? %>
+    <%= link_to 'New Task', new_task_path(project_id: @project.id), class: 'btn btn-default' %>
+  <% end %>
 </p>
 
-<%= link_to 'Edit', edit_project_path(@project) %> |
+<% if @project.tasks.any? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tasks (<%= @project.tasks.count %>)</th>
+        <th>Difficulty</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @tasks.each do |task| %>
+        <tr>
+          <td><strong><%= task.name %>:</strong><p><%= task.description %></p></td>
+          <td><%= task.difficulty_level %></td>
+          <td>
+            <% if @project.user_id == current_user.id || current_user.admin? %>
+              <%= link_to 'X', task, method: :delete, class: 'btn btn-default btn-small' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+<% else %>
+  <p>No tasks at this time.</p>
+<% end %>
+
+<% if @project.user_id == current_user.id || current_user.admin? %>
+  <%= link_to 'Edit', edit_project_path(@project) %> |
+<% end %>
 <%= link_to 'Back', projects_path %>
