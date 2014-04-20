@@ -11,7 +11,7 @@
   <tbody>
     <% @projects.each do |project| %>
       <tr>
-        <td><%= project.name %></td>
+        <td><%= project.name %> by <%= project.user_id %></td>
         <td>
           <%= link_to 'Show', project, class: 'btn' %>
           <%= link_to 'Edit', edit_project_path(project), class: 'btn' %>

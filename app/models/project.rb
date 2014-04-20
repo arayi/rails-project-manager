@@ -4,6 +4,8 @@ class Project < ActiveRecord::Base
   has_many :project_users
   has_many :users, through: :project_users
 
+  has_many :tasks, dependent: :destroy
+
   # complicated version: 
   # has_many :project_viewers, class_name: :ProjectUser, conditions: {role: ProjectUser::ROLE[:viewer]}
   # has_many :viewers, source: :user, through: :project_viewers
